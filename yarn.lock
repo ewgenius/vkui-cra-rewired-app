@@ -1986,10 +1986,10 @@
   resolved "https://registry.yarnpkg.com/@vkontakte/vkjs/-/vkjs-0.20.0.tgz#ddb9367649ab7e79754b9906c3f6e1960f624c37"
   integrity sha512-bocEj9pcr6i6F0LN288xU3PX1MI4OJ3ZJXTa6kFx9IqEgk0CnoMtLAcuH2D7DzZAnc83DJCa/tuo9mT7XW035A==
 
-"@vkontakte/vkui@^4.0.5":
-  version "4.0.5"
-  resolved "https://registry.yarnpkg.com/@vkontakte/vkui/-/vkui-4.0.5.tgz#e1b9fe9f457f81bd62941c6522af47ad6e48b8a5"
-  integrity sha512-3om9WQfeNC69934yast3vkhdoxk2AqiN4ct4v7XrGiPKAkNTD6rbWWOjGojSu3nJeAzHDvoSk/zlwK+KMOrAIQ==
+"@vkontakte/vkui@4.0.4":
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/@vkontakte/vkui/-/vkui-4.0.4.tgz#8485ebf9e818e391f09589a9333ddbd974bb287c"
+  integrity sha512-kj8S5J/fAyWiCeqEg1Q5tfzkHEtaXmhh4rWKIGU9GzMZYZIszWZU3RmUPtJPf3wKhs9p6cm3VhSzNKsHA+WSbA==
 
 "@webassemblyjs/ast@1.9.0":
   version "1.9.0"
