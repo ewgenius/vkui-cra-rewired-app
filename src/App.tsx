@@ -48,15 +48,10 @@ const Gallery = ({ count }: { count: number }) => {
         <Header aside={<Link>Показать все</Link>}>Мини-приложения</Header>
       }
     >
-      <HorizontalScroll style={{ backgroundColor: "red" }}>
-        <div style={{ display: "flex", backgroundColor: "green" }}>
+      <HorizontalScroll>
+        <div style={{ display: "flex" }}>
           {items.map((i) => (
-            <HorizontalCell
-              style={{ border: "1px solid black" }}
-              key={i}
-              size="s"
-              header="Промокот"
-            >
+            <HorizontalCell key={i} size="s" header="Промокот">
               <Avatar
                 size={56}
                 mode="app"
