@@ -137,6 +137,18 @@ const App = withAdaptivity(
             </HorizontalScroll>
           </Group>
           <Group>
+            <div style={{ height: 320 }} />
+          </Group>
+          <Group>
+            <div style={{ height: 320 }} />
+          </Group>
+          <Group>
+            <div style={{ height: 320 }} />
+          </Group>
+          <Group>
+            <div style={{ height: 320 }} />
+          </Group>
+          <Group>
             <CellButton onClick={() => setModal(modals[1])}>Modal 2</CellButton>
             <CellButton onClick={showAlert}>Alert</CellButton>
             <CellButton onClick={showSnackbar}>Snackbar</CellButton>
@@ -216,6 +228,7 @@ const App = withAdaptivity(
                     <Separator />
                   </>
                 )}
+
                 <Placeholder
                   icon={<Icon56UsersOutline />}
                   header="Уведомления от сообществ"
@@ -228,6 +241,21 @@ const App = withAdaptivity(
                 <Placeholder icon={<Icon56MentionOutline />}>
                   Введите адрес страницы в поле поиска
                 </Placeholder>
+              </Group>
+              <Group>
+                <div style={{ height: 320 }} />
+              </Group>
+              <Group>
+                <div style={{ height: 320 }} />
+              </Group>
+              <Group>
+                <div style={{ height: 320 }} />
+              </Group>
+              <Group>
+                <div style={{ height: 320 }} />
+              </Group>
+              <Group>
+                <div style={{ height: 320 }} />
               </Group>
               {snackbar}
             </Panel>
