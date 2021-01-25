@@ -37,6 +37,39 @@ import {
 const panels = ["panel 1", "panel 2", "panel 3"];
 const modals = ["modal 1", "modal 2"];
 
+const Gallery = ({ count }: { count: number }) => {
+  const items = [];
+  for (let i = 0; i < count; i++) {
+    items.push(i);
+  }
+  return (
+    <Group
+      header={
+        <Header aside={<Link>Показать все</Link>}>Мини-приложения</Header>
+      }
+    >
+      <HorizontalScroll style={{ backgroundColor: "red" }}>
+        <div style={{ display: "flex", backgroundColor: "green" }}>
+          {items.map((i) => (
+            <HorizontalCell
+              style={{ border: "1px solid black" }}
+              key={i}
+              size="s"
+              header="Промокот"
+            >
+              <Avatar
+                size={56}
+                mode="app"
+                src="https://sun9-54.userapi.com/c850536/v850536134/15096d/6806J7q6YwM.jpg"
+              />
+            </HorizontalCell>
+          ))}
+        </div>
+      </HorizontalScroll>
+    </Group>
+  );
+};
+
 const App = withAdaptivity(
   ({ viewWidth }: any) => {
     const platform = usePlatform();
@@ -70,72 +103,8 @@ const App = withAdaptivity(
               <Textarea placeholder="Описание" />
             </FormItem>
           </Group>
-          <Group
-            header={
-              <Header aside={<Link>Показать все</Link>}>Мини-приложения</Header>
-            }
-          >
-            <HorizontalScroll>
-              <div style={{ display: "flex" }}>
-                <HorizontalCell size="s" header="Промокот">
-                  <Avatar
-                    size={56}
-                    mode="app"
-                    src="https://sun9-54.userapi.com/c850536/v850536134/15096d/6806J7q6YwM.jpg"
-                  />
-                </HorizontalCell>
-                <HorizontalCell size="s" header="Разделите счёт">
-                  <Avatar
-                    size={56}
-                    mode="app"
-                    src="https://sun9-20.userapi.com/c857416/v857416681/fc6d0/06XQvs4SyiE.jpg"
-                  />
-                </HorizontalCell>
-                <HorizontalCell size="s" header="Рассылки">
-                  <Avatar
-                    size={56}
-                    mode="app"
-                    src="https://sun9-50.userapi.com/c850536/v850536397/129313/qdVJ7A7xd70.jpg"
-                  />
-                </HorizontalCell>
-                <HorizontalCell size="s" header="Тексты песен">
-                  <Avatar
-                    size={56}
-                    mode="app"
-                    src="https://sun9-41.userapi.com/Zf2HluZJZDYjTbxhnSfeYnHtttBYsYbdjJ3QJQ/aDcJQrVVnbQ.jpg"
-                  />
-                </HorizontalCell>
-                <HorizontalCell size="s" header="Промокот">
-                  <Avatar
-                    size={56}
-                    mode="app"
-                    src="https://sun9-54.userapi.com/c850536/v850536134/15096d/6806J7q6YwM.jpg"
-                  />
-                </HorizontalCell>
-                <HorizontalCell size="s" header="Разделите счёт">
-                  <Avatar
-                    size={56}
-                    mode="app"
-                    src="https://sun9-20.userapi.com/c857416/v857416681/fc6d0/06XQvs4SyiE.jpg"
-                  />
-                </HorizontalCell>
-                <HorizontalCell size="s" header="Рассылки">
-                  <Avatar
-                    size={56}
-                    mode="app"
-                    src="https://sun9-50.userapi.com/c850536/v850536397/129313/qdVJ7A7xd70.jpg"
-                  />
-                </HorizontalCell>
-                <HorizontalCell size="s" header="Тексты песен">
-                  <Avatar
-                    size={56}
-                    mode="app"
-                    src="https://sun9-41.userapi.com/Zf2HluZJZDYjTbxhnSfeYnHtttBYsYbdjJ3QJQ/aDcJQrVVnbQ.jpg"
-                  />
-                </HorizontalCell>
-              </div>
-            </HorizontalScroll>
-          </Group>
+          <Gallery count={15} />
+          <Gallery count={2} />
           <Group>
             <div style={{ height: 320 }} />
           </Group>
@@ -218,6 +187,7 @@ const App = withAdaptivity(
           <View activePanel={panel}>
             <Panel id={panels[0]}>
               <PanelHeader right={<Avatar size={36} />}>Panel 1</PanelHeader>
+              <Gallery count={10} />
               <Group>
                 {!isDesktop && (
                   <>

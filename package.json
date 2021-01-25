@@ -24,6 +24,7 @@
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "analyze-vkui": "source-map-explorer 'node_modules/@vkontakte/vkui/dist/cjs/**/*.js'",
     "start": "react-app-rewired start",
+    "prebuild": "./setup.sh",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-app eject"
