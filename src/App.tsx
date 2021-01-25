@@ -27,17 +27,22 @@ import {
   Header,
   HorizontalScroll,
   Link,
+  IOS,
+  PanelHeaderClose,
+  PanelHeaderButton,
+  Gallery,
 } from "@vkontakte/vkui";
 import {
   Icon56UsersOutline,
   Icon56MentionOutline,
   Icon56MessageReadOutline,
+  Icon24Dismiss,
 } from "@vkontakte/icons";
 
 const panels = ["panel 1", "panel 2", "panel 3"];
 const modals = ["modal 1", "modal 2"];
 
-const Gallery = ({ count }: { count: number }) => {
+const ScrollGallery = ({ count }: { count: number }) => {
   const items = [];
   for (let i = 0; i < count; i++) {
     items.push(i);
@@ -91,31 +96,39 @@ const App = withAdaptivity(
         <ModalPage
           id={modals[0]}
           onClose={() => setModal(null)}
-          header={<ModalPageHeader>Modal 1</ModalPageHeader>}
+          header={
+            <ModalPageHeader
+              left={
+                platform !== IOS && (
+                  <PanelHeaderClose onClick={() => setModal(null)} />
+                )
+              }
+              right={
+                platform === IOS && (
+                  <PanelHeaderButton onClick={() => setModal(null)}>
+                    <Icon24Dismiss />
+                  </PanelHeaderButton>
+                )
+              }
+            >
+              Modal 1
+            </ModalPageHeader>
+          }
         >
-          <Group>
-            <div style={{ backgroundColor: "red", width: 100, height: 100 }} />
-          </Group>
-          <Group>
-            <img
-              alt=""
-              src="https://sun9-54.userapi.com/c850536/v850536134/15096d/6806J7q6YwM.jpg"
+          <Gallery slideWidth="90%" align="right" style={{ height: 150 }}>
+            <div style={{ backgroundColor: "var(--destructive)" }} />
+            <div
+              style={{ backgroundColor: "var(--button_commerce_background)" }}
             />
-          </Group>
-          <Group>
-            <Avatar
-              size={72}
-              mode="app"
-              src="https://sun9-54.userapi.com/c850536/v850536134/15096d/6806J7q6YwM.jpg"
-            />
-          </Group>
+            <div style={{ backgroundColor: "var(--accent)" }} />
+          </Gallery>
           <Group>
             <FormItem>
               <Textarea placeholder="Описание" />
             </FormItem>
           </Group>
-          <Gallery count={15} />
-          <Gallery count={2} />
+          <ScrollGallery count={15} />
+          <ScrollGallery count={2} />
           <Group>
             <div style={{ height: 320 }} />
           </Group>
@@ -198,7 +211,7 @@ const App = withAdaptivity(
           <View activePanel={panel}>
             <Panel id={panels[0]}>
               <PanelHeader right={<Avatar size={36} />}>Panel 1</PanelHeader>
-              <Gallery count={10} />
+              <ScrollGallery count={10} />
               <Group>
                 {!isDesktop && (
                   <>
