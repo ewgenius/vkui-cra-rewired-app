@@ -1,8 +1,7 @@
-import React, { FC, useState } from "react";
+import React, { useState } from "react";
 import {
   usePlatform,
   withAdaptivity,
-  AdaptivityProps,
   SplitLayout,
   Snackbar,
   Alert,
@@ -22,21 +21,24 @@ import {
   View,
   Placeholder,
   Button,
+  FormItem,
+  HorizontalCell,
+  Textarea,
+  Header,
+  HorizontalScroll,
+  Link,
 } from "@vkontakte/vkui";
 import {
   Icon56UsersOutline,
   Icon56MentionOutline,
   Icon56MessageReadOutline,
 } from "@vkontakte/icons";
-import "@vkontakte/vkui/dist/vkui.css";
-
-interface AppProps extends AdaptivityProps {}
 
 const panels = ["panel 1", "panel 2", "panel 3"];
 const modals = ["modal 1", "modal 2"];
 
-const App: FC<AppProps> = withAdaptivity(
-  ({ viewWidth }) => {
+const App = withAdaptivity(
+  ({ viewWidth }: any) => {
     const platform = usePlatform();
     const [panel, setPanel] = useState(panels[0]);
     const [modal, setModal] = useState<string | null>(null);
@@ -63,6 +65,77 @@ const App: FC<AppProps> = withAdaptivity(
           onClose={() => setModal(null)}
           header={<ModalPageHeader>Modal 1</ModalPageHeader>}
         >
+          <Group>
+            <FormItem>
+              <Textarea placeholder="Описание" />
+            </FormItem>
+          </Group>
+          <Group
+            header={
+              <Header aside={<Link>Показать все</Link>}>Мини-приложения</Header>
+            }
+          >
+            <HorizontalScroll>
+              <div style={{ display: "flex" }}>
+                <HorizontalCell size="s" header="Промокот">
+                  <Avatar
+                    size={56}
+                    mode="app"
+                    src="https://sun9-54.userapi.com/c850536/v850536134/15096d/6806J7q6YwM.jpg"
+                  />
+                </HorizontalCell>
+                <HorizontalCell size="s" header="Разделите счёт">
+                  <Avatar
+                    size={56}
+                    mode="app"
+                    src="https://sun9-20.userapi.com/c857416/v857416681/fc6d0/06XQvs4SyiE.jpg"
+                  />
+                </HorizontalCell>
+                <HorizontalCell size="s" header="Рассылки">
+                  <Avatar
+                    size={56}
+                    mode="app"
+                    src="https://sun9-50.userapi.com/c850536/v850536397/129313/qdVJ7A7xd70.jpg"
+                  />
+                </HorizontalCell>
+                <HorizontalCell size="s" header="Тексты песен">
+                  <Avatar
+                    size={56}
+                    mode="app"
+                    src="https://sun9-41.userapi.com/Zf2HluZJZDYjTbxhnSfeYnHtttBYsYbdjJ3QJQ/aDcJQrVVnbQ.jpg"
+                  />
+                </HorizontalCell>
+                <HorizontalCell size="s" header="Промокот">
+                  <Avatar
+                    size={56}
+                    mode="app"
+                    src="https://sun9-54.userapi.com/c850536/v850536134/15096d/6806J7q6YwM.jpg"
+                  />
+                </HorizontalCell>
+                <HorizontalCell size="s" header="Разделите счёт">
+                  <Avatar
+                    size={56}
+                    mode="app"
+                    src="https://sun9-20.userapi.com/c857416/v857416681/fc6d0/06XQvs4SyiE.jpg"
+                  />
+                </HorizontalCell>
+                <HorizontalCell size="s" header="Рассылки">
+                  <Avatar
+                    size={56}
+                    mode="app"
+                    src="https://sun9-50.userapi.com/c850536/v850536397/129313/qdVJ7A7xd70.jpg"
+                  />
+                </HorizontalCell>
+                <HorizontalCell size="s" header="Тексты песен">
+                  <Avatar
+                    size={56}
+                    mode="app"
+                    src="https://sun9-41.userapi.com/Zf2HluZJZDYjTbxhnSfeYnHtttBYsYbdjJ3QJQ/aDcJQrVVnbQ.jpg"
+                  />
+                </HorizontalCell>
+              </div>
+            </HorizontalScroll>
+          </Group>
           <Group>
             <CellButton onClick={() => setModal(modals[1])}>Modal 2</CellButton>
             <CellButton onClick={showAlert}>Alert</CellButton>
@@ -123,7 +196,6 @@ const App: FC<AppProps> = withAdaptivity(
             </Panel>
           </SplitCol>
         )}
-        {snackbar}
 
         <SplitCol
           animate={!isDesktop}
@@ -157,6 +229,7 @@ const App: FC<AppProps> = withAdaptivity(
                   Введите адрес страницы в поле поиска
                 </Placeholder>
               </Group>
+              {snackbar}
             </Panel>
 
             <Panel id={panels[1]}>

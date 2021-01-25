@@ -7,6 +7,7 @@ import {
   WebviewType,
 } from "@vkontakte/vkui";
 import App from "./App";
+import "@vkontakte/vkui/dist/vkui.css";
 
 ReactDOM.render(
   <React.StrictMode>

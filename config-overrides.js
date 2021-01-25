@@ -1,7 +1,6 @@
 const path = require("path");
 
-module.exports = function override(config, env) {
-  console.log(JSON.stringify(config.resolve, null, 2));
+module.exports = function override(config) {
   return {
     ...config,
 
