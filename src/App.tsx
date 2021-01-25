@@ -99,6 +99,22 @@ const App = withAdaptivity(
           header={<ModalPageHeader>Modal 1</ModalPageHeader>}
         >
           <Group>
+            <div style={{ backgroundColor: "red", width: 100, height: 100 }} />
+          </Group>
+          <Group>
+            <img
+              alt=""
+              src="https://sun9-54.userapi.com/c850536/v850536134/15096d/6806J7q6YwM.jpg"
+            />
+          </Group>
+          <Group>
+            <Avatar
+              size={72}
+              mode="app"
+              src="https://sun9-54.userapi.com/c850536/v850536134/15096d/6806J7q6YwM.jpg"
+            />
+          </Group>
+          <Group>
             <FormItem>
               <Textarea placeholder="Описание" />
             </FormItem>
