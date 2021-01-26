@@ -31,6 +31,8 @@ import {
   PanelHeaderClose,
   PanelHeaderButton,
   Gallery,
+  Root,
+  PanelHeaderBack,
 } from "@vkontakte/vkui";
 import {
   Icon56UsersOutline,
@@ -39,6 +41,7 @@ import {
   Icon24Dismiss,
 } from "@vkontakte/icons";
 
+const views = ["view 1", "view 2"];
 const panels = ["panel 1", "panel 2", "panel 3"];
 const modals = ["modal 1", "modal 2"];
 
@@ -70,9 +73,77 @@ const ScrollGallery = ({ count }: { count: number }) => {
   );
 };
 
+interface NavigationProps {
+  view: string | null;
+  panel: string | null;
+  modal: string | null;
+  setView: (id: string) => void;
+  setPanel: (id: string) => void;
+  setModal: (id: string) => void;
+  showAlert: VoidFunction;
+  showSnackbar: VoidFunction;
+}
+
+const Navigation = ({
+  view,
+  panel,
+  modal,
+  setView,
+  setPanel,
+  setModal,
+  showAlert,
+  showSnackbar,
+}: NavigationProps) => {
+  return (
+    <Group>
+      {views.map((i) => (
+        <Cell
+          key={`view-${i}`}
+          disabled={i === view}
+          style={
+            i === view
+              ? {
+                  backgroundColor: "var(--button_secondary_background)",
+                  borderRadius: 8,
+                }
+              : {}
+          }
+          onClick={() => setView(i)}
+        >
+          {i}
+        </Cell>
+      ))}
+      <Separator expanded />
+      {panels.map((i) => (
+        <Cell
+          key={`panel-${i}`}
+          disabled={i === panel}
+          style={
+            i === panel
+              ? {
+                  backgroundColor: "var(--button_secondary_background)",
+                  borderRadius: 8,
+                }
+              : {}
+          }
+          onClick={() => setPanel(i)}
+        >
+          {i}
+        </Cell>
+      ))}
+      <Separator expanded />
+      <Cell onClick={() => setModal(modals[0])}>modal 1</Cell>
+      <Cell onClick={() => setModal(modals[1])}>modal 2</Cell>
+      <Cell onClick={showAlert}>alert</Cell>
+      <Cell onClick={showSnackbar}>snackbar</Cell>
+    </Group>
+  );
+};
+
 const App = withAdaptivity(
   ({ viewWidth }: any) => {
     const platform = usePlatform();
+    const [view, setView] = useState(views[0]);
     const [panel, setPanel] = useState(panels[0]);
     const [modal, setModal] = useState<string | null>(null);
     const [popout, setPopout] = useState<any>(null);
@@ -162,6 +233,17 @@ const App = withAdaptivity(
     const isDesktop = viewWidth && viewWidth >= ViewWidth.TABLET;
     const hasHeader = platform !== VKCOM;
 
+    const navigationProps: NavigationProps = {
+      view,
+      panel,
+      modal,
+      setView,
+      setModal,
+      setPanel,
+      showAlert,
+      showSnackbar,
+    };
+
     return (
       <SplitLayout
         style={{ justifyContent: "center" }}
@@ -173,31 +255,7 @@ const App = withAdaptivity(
           <SplitCol fixed width="280px" maxWidth="280px">
             <Panel>
               {hasHeader && <PanelHeader />}
-              <Group>
-                {panels.map((i) => (
-                  <Cell
-                    key={i}
-                    disabled={i === panel}
-                    style={
-                      i === panel
-                        ? {
-                            backgroundColor:
-                              "var(--button_secondary_background)",
-                            borderRadius: 8,
-                          }
-                        : {}
-                    }
-                    onClick={() => setPanel(i)}
-                  >
-                    {i}
-                  </Cell>
-                ))}
-                <Separator />
-                <Cell onClick={() => setModal(modals[0])}>modal 1</Cell>
-                <Cell onClick={() => setModal(modals[1])}>modal 2</Cell>
-                <Cell onClick={showAlert}>alert</Cell>
-                <Cell onClick={showSnackbar}>snackbar</Cell>
-              </Group>
+              <Navigation {...navigationProps} />
             </Panel>
           </SplitCol>
         )}
@@ -208,84 +266,99 @@ const App = withAdaptivity(
           width={isDesktop ? "560px" : "100%"}
           maxWidth={isDesktop ? "560px" : "100%"}
         >
-          <View activePanel={panel}>
-            <Panel id={panels[0]}>
-              <PanelHeader right={<Avatar size={36} />}>Panel 1</PanelHeader>
-              <ScrollGallery count={10} />
-              <Group>
-                {!isDesktop && (
-                  <>
-                    <Cell onClick={() => setModal(modals[0])}>modal 1</Cell>
-                    <Cell onClick={() => setModal(modals[1])}>modal 2</Cell>
-                    <Cell onClick={showAlert}>alert</Cell>
-                    <Cell onClick={showSnackbar}>snackbar</Cell>
-                    <Separator />
-                  </>
-                )}
+          <Root activeView={view}>
+            <View id={views[0]} activePanel={panel}>
+              <Panel id={panels[0]}>
+                <PanelHeader right={<Avatar size={36} />}>Panel 1</PanelHeader>
+                <ScrollGallery count={10} />
+                <Group>
+                  {!isDesktop && <Navigation {...navigationProps} />}
 
-                <Placeholder
-                  icon={<Icon56UsersOutline />}
-                  header="Уведомления от сообществ"
-                  action={<Button size="m">Подключить сообщества</Button>}
-                >
-                  Подключите сообщества, от которых Вы хотите получать
-                  уведомления
-                </Placeholder>
-                <Separator />
-                <Placeholder icon={<Icon56MentionOutline />}>
-                  Введите адрес страницы в поле поиска
-                </Placeholder>
-              </Group>
-              <Group>
-                <div style={{ height: 320 }} />
-              </Group>
-              <Group>
-                <div style={{ height: 320 }} />
-              </Group>
-              <Group>
-                <div style={{ height: 320 }} />
-              </Group>
-              <Group>
-                <div style={{ height: 320 }} />
-              </Group>
-              <Group>
-                <div style={{ height: 320 }} />
-              </Group>
-              {snackbar}
-            </Panel>
+                  <Placeholder
+                    icon={<Icon56UsersOutline />}
+                    header="Уведомления от сообществ"
+                    action={<Button size="m">Подключить сообщества</Button>}
+                  >
+                    Подключите сообщества, от которых Вы хотите получать
+                    уведомления
+                  </Placeholder>
+                  <Separator />
+                  <Placeholder icon={<Icon56MentionOutline />}>
+                    Введите адрес страницы в поле поиска
+                  </Placeholder>
+                </Group>
+                <Group>
+                  <div style={{ height: 320 }} />
+                </Group>
+                <Group>
+                  <div style={{ height: 320 }} />
+                </Group>
+                <Group>
+                  <div style={{ height: 320 }} />
+                </Group>
+                <Group>
+                  <div style={{ height: 320 }} />
+                </Group>
+                <Group>
+                  <div style={{ height: 320 }} />
+                </Group>
+                {snackbar}
+              </Panel>
 
-            <Panel id={panels[1]}>
-              <PanelHeader right={<Avatar size={36} />}>Panel 2</PanelHeader>
-              <Group>
-                <Placeholder>Доступ запрещён</Placeholder>
-                <Separator />
-                <Placeholder
-                  header="Находите друзей"
-                  action={<Button size="m">Найти друзей</Button>}
+              <Panel id={panels[1]}>
+                <PanelHeader
+                  left={<PanelHeaderBack onClick={() => setPanel(panels[0])} />}
+                  right={<Avatar size={36} />}
                 >
-                  Здесь будут отображаться люди, которых вы добавите в друзья
-                </Placeholder>
-              </Group>
-            </Panel>
+                  Panel 2
+                </PanelHeader>
+                <Group>
+                  <Placeholder>Доступ запрещён</Placeholder>
+                  <Separator />
+                  <Placeholder
+                    header="Находите друзей"
+                    action={<Button size="m">Найти друзей</Button>}
+                  >
+                    Здесь будут отображаться люди, которых вы добавите в друзья
+                  </Placeholder>
+                </Group>
+              </Panel>
 
-            <Panel id={panels[2]}>
-              <PanelHeader right={<Avatar size={36} />}>Panel 3</PanelHeader>
-              <Group>
-                <Placeholder
-                  icon={<Icon56MessageReadOutline />}
-                  action={
-                    <Button size="m" mode="tertiary">
-                      Показать все сообщения
-                    </Button>
-                  }
+              <Panel id={panels[2]}>
+                <PanelHeader
+                  left={<PanelHeaderBack onClick={() => setPanel(panels[0])} />}
+                  right={<Avatar size={36} />}
                 >
-                  Нет непрочитанных
-                  <br />
-                  сообщений
-                </Placeholder>
-              </Group>
-            </Panel>
-          </View>
+                  Panel 3
+                </PanelHeader>
+                <Group>
+                  <Placeholder
+                    icon={<Icon56MessageReadOutline />}
+                    action={
+                      <Button size="m" mode="tertiary">
+                        Показать все сообщения
+                      </Button>
+                    }
+                  >
+                    Нет непрочитанных
+                    <br />
+                    сообщений
+                  </Placeholder>
+                </Group>
+              </Panel>
+            </View>
+
+            <View id={views[1]} activePanel="panel-2-1">
+              <Panel id="panel-2-1">
+                <PanelHeader
+                  left={<PanelHeaderBack onClick={() => setView(views[0])} />}
+                >
+                  Test
+                </PanelHeader>
+                <Group>Test</Group>
+              </Panel>
+            </View>
+          </Root>
         </SplitCol>
       </SplitLayout>
     );
