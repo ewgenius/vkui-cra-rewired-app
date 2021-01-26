@@ -33,6 +33,7 @@ import {
   Gallery,
   Root,
   PanelHeaderBack,
+  AdaptivityProps,
 } from "@vkontakte/vkui";
 import {
   Icon56UsersOutline,
@@ -45,33 +46,42 @@ const views = ["view 1", "view 2"];
 const panels = ["panel 1", "panel 2", "panel 3"];
 const modals = ["modal 1", "modal 2"];
 
-const ScrollGallery = ({ count }: { count: number }) => {
-  const items = [];
-  for (let i = 0; i < count; i++) {
-    items.push(i);
+const ScrollGallery = withAdaptivity(
+  ({ count, viewWidth }: { count: number } & AdaptivityProps) => {
+    const items = [];
+    for (let i = 0; i < count; i++) {
+      items.push(i);
+    }
+    return (
+      <Group
+        header={
+          <Header aside={<Link>Показать все</Link>}>Мини-приложения</Header>
+        }
+      >
+        <HorizontalScroll
+          showArrows={viewWidth && viewWidth >= ViewWidth.MOBILE}
+          getScrollToLeft={(i) => i - 120}
+          getScrollToRight={(i) => i + 120}
+        >
+          <div style={{ display: "flex" }}>
+            {items.map((i) => (
+              <HorizontalCell key={i} size="s" header="Промокот">
+                <Avatar
+                  size={56}
+                  mode="app"
+                  src="https://sun9-54.userapi.com/c850536/v850536134/15096d/6806J7q6YwM.jpg"
+                />
+              </HorizontalCell>
+            ))}
+          </div>
+        </HorizontalScroll>
+      </Group>
+    );
+  },
+  {
+    viewWidth: true,
   }
-  return (
-    <Group
-      header={
-        <Header aside={<Link>Показать все</Link>}>Мини-приложения</Header>
-      }
-    >
-      <HorizontalScroll>
-        <div style={{ display: "flex" }}>
-          {items.map((i) => (
-            <HorizontalCell key={i} size="s" header="Промокот">
-              <Avatar
-                size={56}
-                mode="app"
-                src="https://sun9-54.userapi.com/c850536/v850536134/15096d/6806J7q6YwM.jpg"
-              />
-            </HorizontalCell>
-          ))}
-        </div>
-      </HorizontalScroll>
-    </Group>
-  );
-};
+);
 
 interface NavigationProps {
   view: string | null;
