@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import {
   usePlatform,
   withAdaptivity,
@@ -37,6 +37,11 @@ import {
   FixedLayout,
   Tabbar,
   TabbarItem,
+  ModalCard,
+  ANDROID,
+  SimpleCell,
+  IconButton,
+  Input,
 } from "@vkontakte/vkui";
 import {
   Icon56UsersOutline,
@@ -44,12 +49,16 @@ import {
   Icon56MessageReadOutline,
   Icon24Dismiss,
   Icon28Services,
+  Icon28RemoveCircleOutline,
+  Icon20Cancel,
+  Icon28CancelOutline,
 } from "@vkontakte/icons";
 import { Epic } from "@vkontakte/vkui/dist/components/Epic/Epic";
+import { RootContext } from "./RootContext";
 
 const views = ["view 1", "view 2"];
 const panels = ["panel 1", "panel 2", "panel 3"];
-const modals = ["modal 1", "modal 2"];
+const modals = ["modal 1", "modal 2", "modal 3"];
 
 const ScrollGallery = withAdaptivity(
   ({ count, viewWidth }: { count: number } & AdaptivityProps) => {
@@ -111,46 +120,67 @@ const Navigation = ({
 }: NavigationProps) => {
   return (
     <Group>
-      {views.map((i) => (
-        <Cell
-          key={`view-${i}`}
-          disabled={i === view}
-          style={
-            i === view
-              ? {
-                  backgroundColor: "var(--button_secondary_background)",
-                  borderRadius: 8,
-                }
-              : {}
-          }
-          onClick={() => setView(i)}
-        >
-          {i}
-        </Cell>
-      ))}
-      <Separator expanded />
-      {panels.map((i) => (
-        <Cell
-          key={`panel-${i}`}
-          disabled={i === panel}
-          style={
-            i === panel
-              ? {
-                  backgroundColor: "var(--button_secondary_background)",
-                  borderRadius: 8,
-                }
-              : {}
-          }
-          onClick={() => setPanel(i)}
-        >
-          {i}
-        </Cell>
-      ))}
-      <Separator expanded />
-      <Cell onClick={() => setModal(modals[0])}>modal 1</Cell>
-      <Cell onClick={() => setModal(modals[1])}>modal 2</Cell>
-      <Cell onClick={showAlert}>alert</Cell>
-      <Cell onClick={showSnackbar}>snackbar</Cell>
+      <Group mode="plain">
+        {views.map((i) => (
+          <Cell
+            key={`view-${i}`}
+            disabled={i === view}
+            style={
+              i === view
+                ? {
+                    backgroundColor: "var(--button_secondary_background)",
+                    borderRadius: 8,
+                  }
+                : {}
+            }
+            onClick={() => setView(i)}
+          >
+            {i}
+          </Cell>
+        ))}
+      </Group>
+      <Group mode="plain">
+        {panels.map((i) => (
+          <Cell
+            key={`panel-${i}`}
+            disabled={i === panel}
+            style={
+              i === panel
+                ? {
+                    backgroundColor: "var(--button_secondary_background)",
+                    borderRadius: 8,
+                  }
+                : {}
+            }
+            onClick={() => setPanel(i)}
+          >
+            {i}
+          </Cell>
+        ))}
+      </Group>
+      <Group mode="plain">
+        {modals.map((i) => (
+          <Cell
+            key={`panel-${i}`}
+            disabled={i === modal}
+            style={
+              i === modal
+                ? {
+                    backgroundColor: "var(--button_secondary_background)",
+                    borderRadius: 8,
+                  }
+                : {}
+            }
+            onClick={() => setModal(i)}
+          >
+            {i}
+          </Cell>
+        ))}
+      </Group>
+      <Group mode="plain">
+        <Cell onClick={showAlert}>alert</Cell>
+        <Cell onClick={showSnackbar}>snackbar</Cell>
+      </Group>
     </Group>
   );
 };
@@ -250,11 +280,26 @@ const App = withAdaptivity(
             <CellButton onClick={() => setModal(modals[0])}>Modal 1</CellButton>
           </Group>
         </ModalPage>
+        <ModalCard
+          id={modals[2]}
+          onClose={() => setModal(null)}
+          icon={
+            <Avatar mode="app" src="https://robohash.org/image.png" size={72} />
+          }
+          header="Добавить игру «Загадки детства» в меню?"
+          subheader="Игра появится под списком разделов на экране меню и будет всегда под рукой."
+          actions={
+            <Button size="l" mode="primary">
+              Добавить в меню
+            </Button>
+          }
+        />
       </ModalRoot>
     );
 
     const isDesktop = viewWidth && viewWidth >= ViewWidth.TABLET;
     const hasHeader = platform !== VKCOM;
+    const { setPlatform } = useContext(RootContext);
 
     const toggleSnackbar = useCallback(
       () => (snackbar ? setSnackbar(null) : showSnackbar()),
@@ -283,6 +328,16 @@ const App = withAdaptivity(
                 <div style={{ backgroundColor: "blue" }}>Slide2</div>
                 <div style={{ backgroundColor: "green" }}>Slide3</div>
               </Gallery>
+            </Group>
+            <Group>
+              <SimpleCell
+                disabled
+                after={<IconButton icon={<Icon28CancelOutline />} />}
+              >
+                <FormItem>
+                  <Input />
+                </FormItem>
+              </SimpleCell>
             </Group>
             <ScrollGallery count={10} />
             <Group>
@@ -406,6 +461,11 @@ const App = withAdaptivity(
             <Panel>
               {hasHeader && <PanelHeader />}
               <Navigation {...navigationProps} />
+              <Group>
+                <Button onClick={() => setPlatform(ANDROID)}>Android</Button>
+                <Button onClick={() => setPlatform(IOS)}>iOS</Button>
+                <Button onClick={() => setPlatform(VKCOM)}>VKCOM</Button>
+              </Group>
             </Panel>
           </SplitCol>
         )}
