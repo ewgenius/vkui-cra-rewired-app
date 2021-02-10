@@ -336,7 +336,7 @@ const App = withAdaptivity(
       </ModalRoot>
     );
 
-    const isDesktop = viewWidth && viewWidth >= ViewWidth.TABLET;
+    const isDesktop = viewWidth && viewWidth >= ViewWidth.SMALL_TABLET;
     const hasHeader = platform !== VKCOM;
 
     const toggleSnackbar = useCallback(
