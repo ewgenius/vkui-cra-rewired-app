@@ -41,6 +41,8 @@ import {
   Card,
   Div,
   Spinner,
+  SliderSwitch,
+  WebviewType,
 } from "@vkontakte/vkui";
 import {
   Icon56UsersOutline,
@@ -212,6 +214,36 @@ const App = withAdaptivity(
     const [popout, setPopout] = useState<any>(null);
     const [snackbar, setSnackbar] = useState<any>(null);
 
+    const { setPlatform, setWebViewType, webviewType } = useContext(
+      RootContext
+    );
+
+    const appSettings = (
+      <>
+        <Group mode="plain">
+          <Button onClick={() => setPlatform(ANDROID)}>Android</Button>
+          <Button onClick={() => setPlatform(IOS)}>iOS</Button>
+          <Button onClick={() => setPlatform(VKCOM)}>VKCOM</Button>
+        </Group>
+        <Group mode="plain">
+          <SliderSwitch
+            onSwitch={(v) => setWebViewType(v as WebviewType)}
+            activeValue={webviewType}
+            options={[
+              {
+                name: "Internal",
+                value: WebviewType.INTERNAL,
+              },
+              {
+                name: "VK Apps",
+                value: WebviewType.VKAPPS,
+              },
+            ]}
+          />
+        </Group>
+      </>
+    );
+
     const showSnackbar = () =>
       setSnackbar(
         <Snackbar
@@ -253,7 +285,9 @@ const App = withAdaptivity(
           }
         >
           {platform !== VKCOM && <Separator />}
+
           <Group header={<Header>Group</Header>}>
+            {appSettings}
             <FormItem>
               <Textarea placeholder="Описание" />
             </FormItem>
@@ -304,7 +338,6 @@ const App = withAdaptivity(
 
     const isDesktop = viewWidth && viewWidth >= ViewWidth.TABLET;
     const hasHeader = platform !== VKCOM;
-    const { setPlatform } = useContext(RootContext);
 
     const toggleSnackbar = useCallback(
       () => (snackbar ? setSnackbar(null) : showSnackbar()),
@@ -337,7 +370,7 @@ const App = withAdaptivity(
           ])
         );
       }, 1000);
-    }, []);
+    }, []); // eslint-disable-line
 
     const loadContent = () => {
       setLoading(true);
@@ -509,12 +542,8 @@ const App = withAdaptivity(
           <SplitCol fixed width="280px" maxWidth="280px">
             <Panel>
               {hasHeader && <PanelHeader />}
+              <Group>{appSettings}</Group>
               <Navigation {...navigationProps} />
-              <Group>
-                <Button onClick={() => setPlatform(ANDROID)}>Android</Button>
-                <Button onClick={() => setPlatform(IOS)}>iOS</Button>
-                <Button onClick={() => setPlatform(VKCOM)}>VKCOM</Button>
-              </Group>
             </Panel>
           </SplitCol>
         )}
