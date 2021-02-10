@@ -7,6 +7,7 @@ import {
   WebviewType,
   ANDROID,
   Platform,
+  ViewWidth,
 } from "@vkontakte/vkui";
 import App from "./App";
 import { RootContext } from "./RootContext";
@@ -18,7 +19,7 @@ const Root = () => {
     <RootContext.Provider value={{ setPlatform: (p) => setPlatform(p) }}>
       <ConfigProvider
         isWebView={true}
-        webviewType={WebviewType.INTERNAL}
+        webviewType={WebviewType.VKAPPS}
         platform={platform}
       >
         <AdaptivityProvider>

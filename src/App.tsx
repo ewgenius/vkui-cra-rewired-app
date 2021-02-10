@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { FC, useCallback, useContext, useEffect, useState } from "react";
 import {
   usePlatform,
   withAdaptivity,
@@ -42,6 +42,9 @@ import {
   SimpleCell,
   IconButton,
   Input,
+  Card,
+  Div,
+  Spinner,
 } from "@vkontakte/vkui";
 import {
   Icon56UsersOutline,
@@ -52,13 +55,37 @@ import {
   Icon28RemoveCircleOutline,
   Icon20Cancel,
   Icon28CancelOutline,
+  Icon16CheckCircle,
+  Icon24Done,
 } from "@vkontakte/icons";
 import { Epic } from "@vkontakte/vkui/dist/components/Epic/Epic";
 import { RootContext } from "./RootContext";
+import { ReactNode } from "react";
 
 const views = ["view 1", "view 2"];
 const panels = ["panel 1", "panel 2", "panel 3"];
 const modals = ["modal 1", "modal 2", "modal 3"];
+
+const GalleryCard: FC<{}> = () => {
+  return (
+    <div style={{ marginBottom: "15px" }}>
+      <Card style={{ height: "100%", overflow: "hidden" }}>
+        <div style={{ display: "flex" }}>
+          <div style={{ flex: "0 0 0auto", width: "100%", height: "100%" }}>
+            <div
+              style={{
+                width: "90%",
+                height: 350,
+                borderRadius: 20,
+                backgroundColor: "red",
+              }}
+            ></div>
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
+};
 
 const ScrollGallery = withAdaptivity(
   ({ count, viewWidth }: { count: number } & AdaptivityProps) => {
@@ -223,61 +250,48 @@ const App = withAdaptivity(
           }}
           header={
             <ModalPageHeader
-              left={
-                platform !== IOS && (
-                  <PanelHeaderClose onClick={() => setModal(null)} />
-                )
-              }
+              left={<PanelHeaderBack />}
               right={
-                platform === IOS && (
-                  <PanelHeaderButton onClick={() => setModal(null)}>
-                    <Icon24Dismiss />
-                  </PanelHeaderButton>
-                )
+                <PanelHeaderButton onClick={() => setModal(null)}>
+                  <Icon24Done />
+                </PanelHeaderButton>
               }
             >
               Modal 1
             </ModalPageHeader>
           }
         >
-          <Gallery slideWidth="90%" align="right" style={{ height: 150 }}>
-            <div style={{ backgroundColor: "var(--destructive)" }} />
-            <div
-              style={{ backgroundColor: "var(--button_commerce_background)" }}
-            />
-            <div style={{ backgroundColor: "var(--accent)" }} />
-          </Gallery>
-          <Group>
+          {platform !== VKCOM && <Separator />}
+          <Group header={<Header>Group</Header>}>
             <FormItem>
               <Textarea placeholder="Описание" />
             </FormItem>
+            <ScrollGallery count={15} />
           </Group>
-          <ScrollGallery count={15} />
-          <ScrollGallery count={2} />
-          <Group>
-            <div style={{ height: 320 }} />
-          </Group>
-          <Group>
-            <div style={{ height: 320 }} />
-          </Group>
-          <Group>
-            <div style={{ height: 320 }} />
-          </Group>
-          <Group>
-            <div style={{ height: 320 }} />
-          </Group>
-          <Group>
-            <CellButton onClick={() => setModal(modals[1])}>Modal 2</CellButton>
-            <CellButton onClick={showAlert}>Alert</CellButton>
-            <CellButton onClick={showSnackbar}>Snackbar</CellButton>
+          <Group header={<Header>Group + Group.plain</Header>}>
+            <Group mode="plain">
+              <CellButton onClick={() => setModal(modals[1])}>
+                Modal 2
+              </CellButton>
+              <CellButton onClick={showAlert}>Alert</CellButton>
+              <CellButton onClick={showSnackbar}>Snackbar</CellButton>
+            </Group>
           </Group>
         </ModalPage>
         <ModalPage
           id={modals[1]}
           header={<ModalPageHeader>Modal 2</ModalPageHeader>}
         >
+          <Separator />
           <Group>
-            <CellButton onClick={() => setModal(modals[0])}>Modal 1</CellButton>
+            <Group mode="plain">
+              <CellButton onClick={() => setModal(modals[0])}>
+                Modal 1
+              </CellButton>
+            </Group>
+            <Group mode="plain">
+              <ScrollGallery count={20} />
+            </Group>
           </Group>
         </ModalPage>
         <ModalCard
@@ -317,44 +331,88 @@ const App = withAdaptivity(
       showSnackbar: toggleSnackbar,
     };
 
+    const [cards, setCards] = useState<ReactNode[]>([<GalleryCard key="1" />]);
+    const [loaded, setLoaded] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+      setTimeout(() => {
+        setCards(
+          cards.concat([
+            <GalleryCard key="2" />,
+            <GalleryCard key="3" />,
+            <GalleryCard key="4" />,
+            <GalleryCard key="5" />,
+          ])
+        );
+      }, 1000);
+    }, []);
+
+    const loadContent = () => {
+      setLoading(true);
+      setTimeout(() => {
+        setLoaded(true);
+        setLoading(false);
+      }, 1000);
+    };
+
     const content = (
       <Root id="1" activeView={view}>
         <View id={views[0]} activePanel={panel}>
           <Panel id={panels[0]}>
             <PanelHeader right={<Avatar size={36} />}>Panel 1</PanelHeader>
             <Group>
-              <Gallery align="center">
-                <div style={{ backgroundColor: "red" }}>Slide1</div>
-                <div style={{ backgroundColor: "blue" }}>Slide2</div>
-                <div style={{ backgroundColor: "green" }}>Slide3</div>
-              </Gallery>
+              {cards.length <= 1 && (
+                <Div>
+                  <Spinner />
+                </Div>
+              )}
+              {cards.length > 1 && (
+                <Div>
+                  <Gallery
+                    showArrows
+                    slideWidth="90%"
+                    align="right"
+                    style={{ height: 150 }}
+                  >
+                    {cards}
+                  </Gallery>
+                </Div>
+              )}
             </Group>
-            <Group>
-              <SimpleCell
-                disabled
-                after={<IconButton icon={<Icon28CancelOutline />} />}
-              >
-                <FormItem>
-                  <Input />
-                </FormItem>
-              </SimpleCell>
-            </Group>
-            <ScrollGallery count={10} />
-            <Group>
-              {!isDesktop && <Navigation {...navigationProps} />}
+            {loading && !loaded && (
+              <Group>
+                <Div>
+                  <Spinner />
+                </Div>
+              </Group>
+            )}
+            {loaded && !loading && (
+              <>
+                <ScrollGallery count={10} />
+                <Group>
+                  {!isDesktop && <Navigation {...navigationProps} />}
 
-              <Placeholder
-                icon={<Icon56UsersOutline />}
-                header="Уведомления от сообществ"
-                action={<Button size="m">Подключить сообщества</Button>}
-              >
-                Подключите сообщества, от которых Вы хотите получать уведомления
-              </Placeholder>
-              <Separator />
-              <Placeholder icon={<Icon56MentionOutline />}>
-                Введите адрес страницы в поле поиска
-              </Placeholder>
-            </Group>
+                  <Placeholder
+                    icon={<Icon56UsersOutline />}
+                    header="Уведомления от сообществ"
+                    action={<Button size="m">Подключить сообщества</Button>}
+                  >
+                    Подключите сообщества, от которых Вы хотите получать
+                    уведомления
+                  </Placeholder>
+                  <Separator />
+                  <Placeholder icon={<Icon56MentionOutline />}>
+                    Введите адрес страницы в поле поиска
+                  </Placeholder>
+                </Group>
+              </>
+            )}
+            {!loaded && !loading && (
+              <Group>
+                <CellButton onClick={loadContent}>Load Content</CellButton>
+              </Group>
+            )}
             {snackbar}
           </Panel>
 
@@ -473,7 +531,6 @@ const App = withAdaptivity(
         <SplitCol
           animate={!isDesktop}
           spaced={isDesktop}
-          width={isDesktop ? "560px" : "100%"}
           maxWidth={isDesktop ? "560px" : "100%"}
         >
           {isDesktop ? (

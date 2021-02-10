@@ -8,6 +8,6 @@ fi
 
 git clone https://github.com/VKCOM/VKUI.git
 cd VKUI
-git fetch origin master
-git checkout master
+git fetch origin fix/modalroot_viewport_fix
+git checkout fix/modalroot_viewport_fix
 yarn
