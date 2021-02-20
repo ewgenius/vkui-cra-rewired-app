@@ -17,13 +17,12 @@ import {
   WebviewType,
   PanelHeaderButton,
   PanelHeaderBack,
-  Header,
   CellButton,
   Input,
   FormItem,
 } from "@vkontakte/vkui";
 import "@vkontakte/vkui/dist/vkui.css";
-import { Icon24CheckCircleOn, Icon24Dismiss } from "@vkontakte/icons";
+import { Icon24Dismiss } from "@vkontakte/icons";
 import { ReactNode } from "react";
 
 interface ButtonMode {
